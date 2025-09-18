@@ -10,7 +10,7 @@ The dataset contains the following columns:
 - Type1
 - Type2
 - HP
-- Atack
+- Attack
 - Defense
 - SPAtk
 - SPDef
@@ -49,7 +49,7 @@ WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1
     - CTEs (WITH) to determine the top pokemon
     - SUM() aggregation to calculate the total stat of each pokemon
     - Filter with WHERE for Legendary = FALSE and Name does not contain '%Mega%'
-    - CTE, ranked_pokemon uses a DENSE_RANK() window function to rank each pokemon byu total stats within each generation
+    - CTE, ranked_pokemon uses a DENSE_RANK() window function to rank each pokemon by total stats within each generation
     ```
     DENSE_RANK() OVER (PARTITION BY "Generation" ORDER BY total_stats DESC) AS dense_gen_rank
     ```
@@ -61,7 +61,7 @@ WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1
 - **Purpose:** Determine which Pokemon types tend to have the highest overall average total stats.
 - **Techniques:** 
     - UNION ALL to combine Type1 and Type2 into a single column for averaging
-        -**Note** This approach was used so each Pokemon contributes once for Type1 and once for Type2 granted Type 2 is not null. 
+        -**Note:** This approach was used so each Pokemon contributes once for Type1 and once for Type2 granted Type 2 is not null. 
     - AVG() aggregation to compute average total stats based on the total stats
     ```
     combine_types AS (
@@ -83,7 +83,7 @@ WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1
 -**Purpose:** Compare Mage Evolutions with their base Pokemon to measure stat increases and identify which Megas gain the largest boost
 -**Techniques:** 
     - SPLIT_PART() on a JOIN to correctly match MEga forms to their base Pokemon
-        -**Note** SPLIT_PART() was used instead of comparing Pokemon using:
+        -**Note:** SPLIT_PART() was used instead of comparing Pokemon using:
         ```
         JOIN pokemon_analysis mega ON mega.nameChange LIKE 'Mega ' || base.nameChange || '%'
         ```  
@@ -94,3 +94,7 @@ WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1
         - A percentage growth column shows which Pokemon benefit more from the Mega Evolution. With most mega evolution received a 100 point overall stat increase. However, Pokemon with lower base stats saw proportionally larger boosts
         - The majority of legendary mega evolutions experienced an offensive boost, with Attack receiving the highest increase
         - The program correctly handles Pokemon with multiple forms (like Charizard X/Y) and keeps the stronger one. Based on the data Pokemon with Y forms perform better than Pokemon with X forms
+
+## Future Improvements
+- **Type Effectiveness vs Stats:** Determine if stronger types have better type matchups
+- **Legendary-Only Analysis:** Compare which generation introduced the strongest legendary Pokemon group
