@@ -54,7 +54,15 @@ SELECT
     		(mega."Speed" - base."Speed") 
     	) THEN 'SpDef'
     	ELSE 'Speed'
-    END AS biggest_gain
+    END AS biggest_gain,
+    GREATEST(
+    		(mega."HP" - base."HP"),
+    		(mega."Attack" - base."Attack"),
+    		(mega."Defense" - base."Defense"),
+    		(mega."SpAtk" - base."SpAtk"),
+   			(mega."SpDef" - base."SpDef"),
+    		(mega."Speed" - base."Speed")
+    ) AS biggest_gain_value
     
 FROM pokemon_analysis base
 --JOIN pokemon_analysis mega ON mega.nameChange LIKE 'Mega ' || base.nameChange || '%'
@@ -72,7 +80,8 @@ SELECT DISTINCT ON (base_name)
     mega_stat,
 	(mega_stat - base_stat) AS stat_remainder,
 	ROUND(((mega_stat - base_stat) * 100 / base_stat), 2) AS pct_increase,
-	biggest_gain
+	biggest_gain,
+    biggest_gain_value
 FROM mega_evol
 ORDER BY base_name, stat_remainder DESC
 )
