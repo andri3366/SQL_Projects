@@ -17,10 +17,11 @@ SELECT
 	END AS nameChange,
 	-- Fix Legendary 
 	CASE
-		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
+		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Genesect', 'Volcanion')
 			OR p."Name" LIKE 'Deoxys%'
 			OR p."Name" LIKE 'Shaymin%'
 			OR p."Name" LIKE 'Keldeo%'
+			OR p."Name" LIKE 'Meloetta%'
 			OR p."Name" LIKE 'Diancie%'
 			OR p."Name" LIKE 'Hoopa%'
 		THEN FALSE
@@ -28,10 +29,11 @@ SELECT
 	END AS Legendary_Fixed,
 	-- Add a mythical Pokemon column
 	CASE 
-		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
+		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Genesect', 'Volcanion')
 			OR p."Name" LIKE 'Deoxys%'
 			OR p."Name" LIKE 'Shaymin%'
 			OR p."Name" LIKE 'Keldeo%'
+			OR p."Name" LIKE 'Meloetta%'
 			OR p."Name" LIKE 'Diancie%'
 			OR p."Name" LIKE 'Hoopa%'		
 		THEN TRUE
