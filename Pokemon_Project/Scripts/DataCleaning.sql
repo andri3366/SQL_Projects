@@ -2,6 +2,7 @@ CREATE VIEW pokemon_analysis AS
 WITH data_clean AS ( 
 SELECT 
 	*,
+	-- Fix names for Pokemon
 	CASE
 		WHEN p."Name" LIKE '%Mega%' THEN substring(p."Name" FROM POSITION('Mega ' IN p."Name"))
 		WHEN p."Name" LIKE '%Hoopa%' THEN regexp_replace(p."Name", 'Hoopa', '', 1, 1)
@@ -10,9 +11,11 @@ SELECT
 		WHEN p."Name" LIKE 'Kyurem%' AND length(p."Name") > length('Kyurem') THEN regexp_replace(p."Name", 'Kyurem', '', 1, 1)
 		WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1 \2', 'g')
 		WHEN p."Name" ~ '[0-9]' THEN regexp_replace(p."Name", '([a-z])([0-9])', '\1 \2', 'g')
+		WHEN p."Name" LIKE 'Nidoranâ™€' THEN 'Nidoran Female'
+		WHEN p."Name" LIKE 'Nidoranâ™‚' THEN 'Nidoran Male'
 		ELSE p."Name"
 	END AS nameChange,
-
+	-- Fix Legendary 
 	CASE
 		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
 			OR p."Name" LIKE 'Deoxys%'
@@ -23,7 +26,7 @@ SELECT
 		THEN FALSE
 		ELSE p."Legendary"
 	END AS Legendary_Fixed,
-
+	-- Add a mythical Pokemon column
 	CASE 
 		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
 			OR p."Name" LIKE 'Deoxys%'
