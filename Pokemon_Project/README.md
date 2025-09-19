@@ -42,6 +42,19 @@ WHEN p."Name" LIKE 'Kyogre%' AND length(p."Name") > length('Kyogre') THEN regexp
 
 WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1 \2', 'g')
 ```
+- The Legendary column was update to properly set some mythical pokemon from TRUE to FALSE and add in a Mythical pokemon column for proper analysis
+```
+CASE 
+	WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione',           'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
+		OR p."Name" LIKE 'Deoxys%'
+	    OR p."Name" LIKE 'Shaymin%'
+		OR p."Name" LIKE 'Keldeo%'
+		OR p."Name" LIKE 'Diancie%'
+		OR p."Name" LIKE 'Hoopa%'		
+	THEN TRUE
+	ELSE FALSE
+END AS Mythical
+```
 ## 📊 Analysis
 1. What is the Highest Stat per Generation?
 - **Purpose:** Determine the top 6 Pokemon per generation, excluding legendary and mega evolution pokemon, to determine the strongest team from total stats.
@@ -98,3 +111,4 @@ WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1
 ## Future Improvements
 - **Type Effectiveness vs Stats:** Determine if stronger types have better type matchups
 - **Legendary-Only Analysis:** Compare which generation introduced the strongest legendary Pokemon group
+- **Visualization:** Use tools such as PowerBI or Tableau to create visualizations of each analysis
