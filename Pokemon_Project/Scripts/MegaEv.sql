@@ -1,9 +1,9 @@
 WITH mega_evol AS (
 SELECT
-	base."Index"        AS base_index,
-    base.nameChange     AS base_name,
-    mega.nameChange     AS mega_name,
-    base."Legendary"	AS legendary,
+	base."Index"        	AS base_index,
+    base.nameChange     	AS base_name,
+    mega.nameChange     	AS mega_name,
+    base.legendary_fixed	AS legendary,
     (base."HP" + base."Attack" + base."Defense" + base."SpAtk" + base."SpDef" + base."Speed") AS base_stat,
     (mega."HP" + mega."Attack" + mega."Defense" + mega."SpAtk" + mega."SpDef" + mega."Speed") AS mega_stat,
     (mega."HP" - base."HP") AS hp_gain,
@@ -70,6 +70,7 @@ JOIN pokemon_analysis mega
       ON SPLIT_PART(mega.nameChange, ' ', 2) = base.nameChange
          OR SPLIT_PART(mega.nameChange, ' ', 2) || ' ' || SPLIT_PART(mega.nameChange, ' ', 3) = base.nameChange
 WHERE base.nameChange NOT LIKE 'Mega%'
+	AND mega.nameChange LIKE 'Mega%'
 ),
 stronger_mega AS (
 SELECT DISTINCT ON (base_name)

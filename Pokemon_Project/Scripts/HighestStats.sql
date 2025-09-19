@@ -6,7 +6,8 @@ SELECT
 	pa."Generation"
 FROM pokemon_analysis pa
 WHERE
-	pa."Legendary" IS NOT TRUE
+	pa.legendary_fixed IS NOT TRUE
+	AND pa.mythical IS NOT TRUE
 	AND pa."Name" NOT LIKE '%Mega%'
 GROUP BY
 	pa."Index",

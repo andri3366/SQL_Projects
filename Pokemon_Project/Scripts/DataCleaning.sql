@@ -11,7 +11,29 @@ SELECT
 		WHEN p."Name" ~ '[a-z][A-Z]' THEN regexp_replace(p."Name", '([a-z])([A-Z])', '\1 \2', 'g')
 		WHEN p."Name" ~ '[0-9]' THEN regexp_replace(p."Name", '([a-z])([0-9])', '\1 \2', 'g')
 		ELSE p."Name"
-	END AS nameChange
+	END AS nameChange,
+
+	CASE
+		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
+			OR p."Name" LIKE 'Deoxys%'
+			OR p."Name" LIKE 'Shaymin%'
+			OR p."Name" LIKE 'Keldeo%'
+			OR p."Name" LIKE 'Diancie%'
+			OR p."Name" LIKE 'Hoopa%'
+		THEN FALSE
+		ELSE p."Legendary"
+	END AS Legendary_Fixed,
+
+	CASE 
+		WHEN p."Name" IN ('Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Phione', 'Darkrai', 'Arceus', 'Victini', 'Meloetta', 'Genesect', 'Volcanion')
+			OR p."Name" LIKE 'Deoxys%'
+			OR p."Name" LIKE 'Shaymin%'
+			OR p."Name" LIKE 'Keldeo%'
+			OR p."Name" LIKE 'Diancie%'
+			OR p."Name" LIKE 'Hoopa%'		
+		THEN TRUE
+		ELSE FALSE
+	END AS Mythical
 FROM pokemondb p 
 )
 SELECT
