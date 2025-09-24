@@ -22,7 +22,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
 ## Data Cleaning
 
 ## Analysis
-1. Who are the most valuable customers?
+**[1. Who are the most valuable customers?](scripts/Q1.sql)**
 - **Purpose:** Determine which customers generate the most revenue based on their lifetime value (ltv) to allow for targeted marketing and resource prioritization.
 - **Techniques:**
     - CTE to calculate each customer's total lifetime value (quantity * netprice * exchangerate)
@@ -49,7 +49,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     - Grow mid-value customers by personalized promotions and targeted up-selling to help some customers move into the high-value tier
     - Re-engage the low-value customers through lightweight campaigns to increase order frequency
 
-2. How do different customer groups generate revenue?
+**[2. How do different customer groups generate revenue?](scripts/Q2.sql)**
 - **Purpose:** Provide a cohort analysis to evaluate how customer acquisition varies over time. The company can use this to measure how many new customers were gained each year and how much revenue they contribute. 
 - **Techniques:**
     - Assign each customer to a cohort based on their first purchase date
@@ -60,7 +60,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     - Investigate the peak years, 2018 to 2019, to understand what conditions led to strong growth and how to re-implicate those strategies for the upcoming years
     - Address the recent decline in 2023 to 2024 by refining market channels with personalized re-engagement offers to reduce churn
 
-3. Which customers haven't purchased recently?
+**[3. Which customers haven't purchased recently?](scripts/Q3.sql)**
 - **Purpose:** Identify customers who are at risk of churning so the business can focus on re-engagement strategies, as retaining customers is often more cost-effective than acquiring new ones.
 - **Techniques:**
     - Used a CTE to order each customer based on their most recent purchase, with ROW_NUMBER() to flag the most recent purchase as 1
@@ -90,7 +90,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     - Apply retention programs to keep the 8-10% active customers engaged
     - Improve newer customer experience so they stay longer and prevent potential churn 
 
-4. Which regions not only spend the most per order but also have the highest repeat purchase rates?
+**[4. Which regions not only spend the most per order but also have the highest repeat purchase rates?](scripts/Q4.sql)**
 - **Purpose:** Combine average order value (AOV) with repeat purchase rate (RPR) to identify which regions have the most high-value customers. 
 - **Techniques:** 
     - Create a per-customer summary using a CTE to group customers by region and determine how many orders a customer has made and the total amount spent per customer
@@ -119,7 +119,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     - Germany and Netherlands are solid middle ground with reasonable repeat purchase ratees but lower spending levels
     - France, Italy, and UK are underperforming with low spending per order and per customer
 - **Business Potential:** 
-    - Double down on high-value regions (Canada, Austalia) to maximize the return on investment (ROI)
+    - Double down on high-value regions (Canada, Australia) to maximize the return on investment (ROI)
     - The United States has the highest repeat purchase rate, making them ideal for up-selling higher margin products
     - Encourage volume discounts or bundles for the mid tier regions (Germany, Netherlands)
     - Target the underperforming regions (France, Italy, and UK) with localized marketing campaigns
