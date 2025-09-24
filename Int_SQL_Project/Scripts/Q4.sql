@@ -21,7 +21,7 @@ region_rates AS (
 )
 
 SELECT 
-	countryfull,
+	countryfull AS country_name,
 	ROUND(avg_order_value, 2) AS avg_order_value,
 	ROUND(100 * repeat_cust / total_cust, 2) AS repeat_purchase_rate,
 	ROUND(avg_value_per_cust, 2) AS avg_value_per_cust 

@@ -2,7 +2,7 @@
 ## Overview
 This project explores and analyzes sales data using SQL to answer key business questions based on customer segmentation, cohort analysis, and retention.
 
-This projects analysis was inspired by Luke Barousse's SQL course on YouTube [YouTube](https://www.youtube.com/watch?v=QKIGsShyEsQ), with an additional self-designed question that combines multiple customer metrics.
+This projects analysis was inspired by Luke Barousse's SQL course on YouTube [YouTube](https://www.youtube.com/watch?v=QKIGsShyEsQ), with an additional of a self-designed question that combines multiple customer metrics ([Question 4](Scripts/Q4.sql)).
 
 ## The Dataset
 The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_Analytics_Course/releases/tag/v.0.0.0), was used to simulate real-world sales transactions using the following tables:
@@ -20,7 +20,22 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
 - **VS Code** - visualization
 
 ## Data Cleaning
+- **Purpose:** Created a view to simplify the analysis and avoid repeating aggregate functions and joins. The view was used to unify sales and customer data, standardize customer names, calculate revenue per order, and track purchase behaviour. 
+```
+-- Aggregate net revenue and count of orders
+sum(s.quantity * s.netprice * s.exchangerate) AS total_net_revenue,
+count(s.orderkey) AS count,
 
+-- Clean up customer names
+concat(TRIM(BOTH FROM givenname), ' ', TRIM(BOTH FROM surname)) AS cleaned_name,
+
+-- Purchase behaviour
+min(orderdate) OVER (PARTITION BY customerkey) AS first_purchase,
+EXTRACT(year FROM min(orderdate) OVER (PARTITION BY customerkey)) AS cohort_year
+
+-- Join the sales and customer table
+LEFT JOIN customer c ON c.customerkey = s.customerkey
+```
 ## Analysis
 **[1. Who are the most valuable customers?](scripts/Q1.sql)**
 - **Purpose:** Determine which customers generate the most revenue based on their lifetime value (ltv) to allow for targeted marketing and resource prioritization.
@@ -42,7 +57,8 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     END AS customer_segment
     ```
     - Compare revenue contribution across each segment
-    - **photo**
+
+![Q1](images/Q1_results.png)
 - **Interpretation:** A small group of high-value customers from 25% of customers generates the majority of total sales ($135.4M), this roughly conforms with the Pareto principle. These High-Value customers provide a significant impact on the companies revenue, thereby, it is important appease to the 12,372 High-Value customers. 
 -**Business Potential:**
     - Protect the high-value customers by offering loyalty programs, perks, or priority support to keep them engaged
@@ -54,7 +70,8 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
 - **Techniques:**
     - Assign each customer to a cohort based on their first purchase date
     - Aggregate total customers, revenue, and customer revenue for each cohort year
-    - **photo**
+
+    ![Q2](images/Q2_results.png)
 - **Interpretation:** Reveals the company grew has grown its customer base from 2015 to 2022 before declining in 2023 and 2024. While the customer count rose in 2018 to 2022, the average revenue per customer declined over time. This reveals the business is bringing in more customers gradually since 2022, but each customer is spending less on average. 
 -**Business Potential:**
     - Investigate the peak years, 2018 to 2019, to understand what conditions led to strong growth and how to re-implicate those strategies for the upcoming years
@@ -84,7 +101,8 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
 	SUM(COUNT(customerkey)) OVER (PARTITION BY cohort_year ) AS total_customers,
 	ROUND(COUNT(customerkey) / SUM(COUNT(customerkey)) OVER (PARTITION BY cohort_year), 2) AS total_percentage
     ```
-    - **photo**
+
+![Q3](images/Q3_results.png)
 - **Interpretation:** This allows businesses to quantify how much revenue is at rick from churned customers and whether retention strategies are needed. Based on the data ~90% of customers have churned, with only 8-10% remaining active across all cohorts. Even though the absolute number of active customers has increased in the newer cohorts, the pattern remains the same, meaning the company struggles with long-term retention.
 - **Business Potential:**
     - Apply retention programs to keep the 8-10% active customers engaged
@@ -113,6 +131,7 @@ The dataset, called [contoso_100k](https://github.com/lukebarousse/Int_SQL_Data_
     ```
     ROUND(100 * repeat_cust / total_cust, 2) AS repeat_purchase_rate,
     ```
+    ![Q4](images/Q4_results.png)
 - **Interpretation:** 
     - Canada and Australia have a high-value market as their customers are spending more per order and per customer
     - United States is reliable with the strongest repeat rate
