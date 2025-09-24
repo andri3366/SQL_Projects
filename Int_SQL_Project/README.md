@@ -37,7 +37,7 @@ EXTRACT(year FROM min(orderdate) OVER (PARTITION BY customerkey)) AS cohort_year
 LEFT JOIN customer c ON c.customerkey = s.customerkey
 ```
 ## Analysis
-**[1. Who are the most valuable customers?](scripts/Q1.sql)**
+**[1. Who are the most valuable customers?](Scripts/Q1.sql)**
 - **Purpose:** Determine which customers generate the most revenue based on their lifetime value (ltv) to allow for targeted marketing and resource prioritization.
 - **Techniques:**
     - CTE to calculate each customer's total lifetime value (quantity * netprice * exchangerate)
@@ -65,7 +65,7 @@ LEFT JOIN customer c ON c.customerkey = s.customerkey
     - Grow mid-value customers by personalized promotions and targeted up-selling to help some customers move into the high-value tier
     - Re-engage the low-value customers through lightweight campaigns to increase order frequency
 
-**[2. How do different customer groups generate revenue?](scripts/Q2.sql)**
+**[2. How do different customer groups generate revenue?](Scripts/Q2.sql)**
 - **Purpose:** Provide a cohort analysis to evaluate how customer acquisition varies over time. The company can use this to measure how many new customers were gained each year and how much revenue they contribute. 
 - **Techniques:**
     - Assign each customer to a cohort based on their first purchase date
@@ -77,7 +77,7 @@ LEFT JOIN customer c ON c.customerkey = s.customerkey
     - Investigate the peak years, 2018 to 2019, to understand what conditions led to strong growth and how to re-implicate those strategies for the upcoming years
     - Address the recent decline in 2023 to 2024 by refining market channels with personalized re-engagement offers to reduce churn
 
-**[3. Which customers haven't purchased recently?](scripts/Q3.sql)**
+**[3. Which customers haven't purchased recently?](Scripts/Q3.sql)**
 - **Purpose:** Identify customers who are at risk of churning so the business can focus on re-engagement strategies, as retaining customers is often more cost-effective than acquiring new ones.
 - **Techniques:**
     - Used a CTE to order each customer based on their most recent purchase, with ROW_NUMBER() to flag the most recent purchase as 1
@@ -108,7 +108,7 @@ LEFT JOIN customer c ON c.customerkey = s.customerkey
     - Apply retention programs to keep the 8-10% active customers engaged
     - Improve newer customer experience so they stay longer and prevent potential churn 
 
-**[4. Which regions not only spend the most per order but also have the highest repeat purchase rates?](scripts/Q4.sql)**
+**[4. Which regions not only spend the most per order but also have the highest repeat purchase rates?](Scripts/Q4.sql)**
 - **Purpose:** Combine average order value (AOV) with repeat purchase rate (RPR) to identify which regions have the most high-value customers. 
 - **Techniques:** 
     - Create a per-customer summary using a CTE to group customers by region and determine how many orders a customer has made and the total amount spent per customer
