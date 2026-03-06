@@ -1,0 +1,100 @@
+-- Andrianna Wardill
+-- 041067235
+use flightdb;
+
+-- Question 1
+select airports.name, airports.city, countries.name
+from airports
+join countries on airports.country_id = countries.id;
+
+-- Question 2
+select routes.airline_id, routes.source_airport_id, routes.codeshare
+from airports
+join routes on routes.source_airport_id = airports.id
+where airports.name like 'Lester B Pearson Intl';
+
+-- Question 3
+select distinct airports.name as airport_name, airlines.name as airline_name
+from routes
+join airlines on routes.airline_id = airlines.id
+join airports on routes.source_airport_id = airports.id
+where airports.name like 'Lester B Pearson Intl';
+
+-- Question 4
+select distinct aircrafts.name as aircraft_name, airlines.name, airports.name
+from routes
+join route_aircrafts on route_aircrafts.route_id = routes.id
+join aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+join airlines on routes.airline_id = airlines.id
+join airports on routes.source_airport_id = airports.id
+where airports.name like 'Lester B Pearson Intl';
+
+-- Question 5
+select airlines.name
+from airlines
+join countries on airlines.country_id = countries.id;
+
+-- Question 6
+select count(airlines.name), airlines.name, countries.name
+from airlines
+join countries on airlines.country_id = countries.id
+group by countries.name;
+
+-- Question 7
+select count(distinct aircrafts.name)
+from aircrafts
+join route_aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+join routes on route_aircrafts.route_id = routes.id
+join airports on airports.id = routes.destination_airport_id
+join countries on countries.id = airports.country_id
+where countries.name like 'France';
+
+-- Question 8
+select count(distinct aircrafts.name)
+from aircrafts
+join route_aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+join routes on route_aircrafts.route_id = routes.id
+join airports on airports.id = routes.destination_airport_id
+join countries on countries.id = airports.country_id
+where countries.name like 'France' or 'Germany' or 'Spain' or 'Italy';
+
+-- Question 9
+select airlines.name, aircrafts.name, countries.name
+from countries
+join airports on countries.id = airports.country_id
+join routes on airports.id = routes.destination_airport_id
+join airlines on routes.airline_id = airlines.id
+join route_aircrafts on route_aircrafts.route_id = routes.id
+join aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+where countries.name like 'France' or countries.name like 'Germany' or countries.name like 'Spain' or countries.name like 'Italy'
+group by countries.name;
+
+-- Question 10
+select aircrafts.wake_size
+from countries
+join airports on countries.id = airports.country_id
+join routes on airports.id = routes.source_airport_id
+join airlines on routes.airline_id = airlines.id
+join route_aircrafts on route_aircrafts.route_id = routes.id
+join aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+where countries.name like 'Canada' or countries.name like 'united States' or countries.name like 'Mexico'
+group by countries.name;
+
+-- Question 11
+select count(distinct aircrafts.name)
+from aircrafts
+join route_aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+join routes on route_aircrafts.route_id = routes.id
+join airports on airports.id = routes.destination_airport_id
+where airports.countries_id in (select countries.id
+from countries
+where countries.name like 'France' or countries.name like 'Germany' or countries.name like 'Spain' or countries.name like 'Italy')
+group by countries.name;
+
+-- Question 12
+select * from (
+select count(distinct aircrafts.name)
+from aircrafts, route_aircrafts, routes, airports, countries
+where route_aircrafts.aircraft_id = aircrafts.id and route_aircrafts.route_id = routes.id
+and airports.id = routes.destination_airport_id and countries.id = airports.country_id
+and countries.name like 'France') as a ;

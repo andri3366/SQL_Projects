@@ -1,0 +1,75 @@
+-- Andrianna Wardill
+-- 041067235
+
+use flightdb;
+
+-- Question 1
+create view task8 as
+select count(distinct aircrafts.name), countries.name
+from aircrafts
+join route_aircrafts on route_aircrafts.aircraft_id = aircrafts.id
+join routes on route_aircrafts.route_id = routes.id
+join airports on airports.id = routes.destination_airport_id
+join countries on countries.id = airports.country_id
+where countries.name like 'France' or 'Germany' or 'Spain' or 'Italy';
+
+-- Question 2
+create index elevation on
+	airports (elevation);
+    
+-- Question 3
+create index sourcedest on
+	airports (id);
+select distinct(airports.name)
+from airports, routes
+where airports.id = routes.source_airport_id or airports.id = routes.destination_airport_id;
+
+-- Question 4
+select count(*)
+from countries;
+
+-- Question 6
+start transaction;
+select @id:=MAX(id)+1
+from countries;
+insert into countries(id, name)
+values
+(@id, 'mexiquo');
+
+-- Question 7 there are now 241 rows in the table countries
+-- Question 8 there are only 240 rows in the second connection
+
+-- Question 9
+start transaction;
+select @id:=MAX(id)+1
+from countries;
+insert into countries(id, name)
+values
+(@id, 'mexiquo');
+commit;
+
+-- Question 10 there are now 242 rows in the second connection
+
+-- Question 11
+start transaction;
+select @id:=MAX(id)+1
+from countries;
+insert into countries(id, name)
+values
+(@id, 'mexiquo');
+
+-- Question 12
+rollback;
+
+-- Question 13 there are still only 242 rows in the first connection
+-- Question 14 there are also 242 rows reported in the second connection
+
+-- start transaction;
+select @id:=MAX(id)+1
+from countries;
+insert into countries(id, name)
+values
+(@id, 'mexiquo');
+commit;
+
+-- Question 16 there are now 243 rows in the second connection

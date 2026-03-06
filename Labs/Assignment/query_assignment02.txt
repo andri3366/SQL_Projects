@@ -1,0 +1,78 @@
+-- Andrianna Wardill, Isabel Foy, Owen Chatland
+
+-- uses assignment02
+use assignment02;
+
+-- question 1 selects all rows from table clients
+select *
+from clients
+;
+-- question 2 -- selects order_date from sales_orders
+select order_date
+from sales_orders
+;
+-- question 3 selects all quantities from sales_order_services with all quantities less than 2
+select quantity
+from sales_order_services
+where quantity < 2
+;
+-- question 4 counts the names where cities are toronto or ottawa
+select count(name)
+from clients
+where city like 'toronto' or city like 'ottawa'
+;
+-- question 5 counts the distinct client names from countries like 'France' by joining table countries and clients
+select count(distinct clients.name), clients.name, countries.name
+from clients
+join countries on clients.country_id = countries.id
+where countries.name like 'France'
+;
+-- question 6 select everything from sales_oder_service_history table where countries.name is like 'canada'
+select *
+from sales_order_service_history
+join sales_order_services on sales_order_service_history.sales_order_service_id = sales_order_services.id
+join clients on sales_order_services.client_id = clients.id
+join countries on clients.country_id = countries.id
+where countries.name like 'canada'
+;
+-- question 7, count all clients.name from clients
+select count(clients.name)
+from clients
+;
+-- question 8 counts the services.name and select services.name and clients.name from services where the clients.name like 'andrianna' or 'isabel' grouped by clients.name
+select count(services.name), services.name, clients.name
+from services
+join sales_order_services on services.id = sales_order_services.service_id
+join clients on sales_order_services.client_id = clients.id
+where clients.name like 'andrianna' or clients.name like 'isabel'
+group by clients.name
+;
+-- question 9 count clients.name and selects history_types.name from clients grouped by history_types.name  having the history_types.name in 'old' or 'on sale'
+select count(clients.name), history_types.name
+from clients
+join sales_order_services on sales_order_services.client_id = clients.id
+join sales_order_service_history on sales_order_service_history.sales_order_service_id = sales_order_services.id
+join history_types on sales_order_service_history.history_type_id = history_types.id
+group by history_types.name
+having history_types.name in ('old', 'on sale')
+;
+-- question 10 counts services.name and displaying the services.name from services where clients.name like 'andrianna' or 'isabel' are grouped by services.name
+select count(services.name), services.name
+from services
+join sales_order_services on services.id = sales_order_services.service_id
+where sales_order_services.client_id in (select clients.id
+from clients
+where clients.name like 'andrianna' or clients.name like 'isabel')
+group by services.name
+;
+-- question 11 counts services.name from services where countries.name like 'canada' and history_types.name like 'new' are goruped by services.name
+select count(services.name), services.name
+from services
+join sales_order_services on services.id = sales_order_services.service_id
+join sales_order_service_history on sales_order_service_history.sales_order_service_id = sales_order_services.id
+join history_types on sales_order_service_history.history_type_id = history_types.id
+join clients on sales_order_services.client_id = clients.id
+join countries on clients.country_id = countries.id
+where countries.name like 'canada' and history_types.name like 'new'
+group by services.name
+;

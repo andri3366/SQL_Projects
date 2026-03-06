@@ -1,0 +1,53 @@
+-- Andrianna Wardill
+-- 04106235
+use flightdb;
+
+-- Question 1
+select * from aircrafts;
+-- Question 2
+select name, description
+from aircrafts;
+-- Question 3
+select DISTINCT name 
+from aircrafts;
+-- Question 4
+select name AS airport_name, city
+from airports;
+-- Question 5
+select name, city, elevation
+from airports
+where country_id = '24';
+-- Question 6
+select * 
+from countries
+where id = '24';
+-- Question 7 
+select * 
+from airports
+where elevation between 400 and 500
+order by elevation;
+-- Question 8
+select name 
+from airports
+where name like 'Air%';
+-- Question 9
+select name
+from airports
+where name like '%International%';
+-- Question 10
+select name from airports 
+where name like '%Aviation%';
+-- Question 11
+select id 
+from countries
+where name like 'Canada';
+select * 
+from airports
+where country_id = 208 and elevation = 0;
+-- Question 12
+select * 
+from countries
+where name = 'France';
+select *
+from airlines
+where country_id = 130 and active = 'Y'

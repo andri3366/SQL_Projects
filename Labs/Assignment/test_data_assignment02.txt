@@ -1,0 +1,171 @@
+-- Andrianna Wardill, Isabel Foy, Owen Chatland
+
+-- will drop the database if assignment02 exists and create a new database to use
+drop database if exists assignment02;
+create database assignment02;
+use assignment02;
+
+create table services ( -- creates table for service with primary key id
+	id int not null auto_increment,
+    name varchar(50) not null,
+    description mediumtext,
+    cost numeric(10,2),
+    constraint servicesPK primary key (id)
+    );
+    
+create table countries( -- creates table for couuntries with primary key id
+	id int not null auto_increment,
+    name varchar(50) not null,
+    constraint countriesPK primary key (id)
+);
+
+create table states_provinces( -- creates table for states_provinces with primary key id and foreign key with referencce to countries
+	id int not null auto_increment,
+    name varchar(50) not null,
+    country_id int,
+    constraint states_provincesPK primary key (id),
+    constraint countriesFK foreign key (country_id)
+		references countries (id)
+        on update no action on delete no action
+        -- when the table is updated there is no changes to the table countries
+);
+    
+create table clients ( -- creates table for clients with primary key id with references to states_provinces and countries
+	id int not null auto_increment,
+    name varchar(50) not null,
+    address varchar(50),
+    address2 varchar(50),
+    city varchar(50),
+    postal_code varchar(12),
+    phone_number varchar(12),
+    email varchar(150),
+    states_province_id int,
+    country_id int,
+    constraint clientsPK primary key (id),
+    constraint states_provincesFK foreign key (states_province_id)
+		references states_provinces (id)
+        on update no action on delete no action,
+	constraint countryFK foreign key (country_id)
+		references countries (id)
+        on update no action on delete no action
+);
+
+create table sales_orders( -- creates table for slaes_orders with primary key id and reference to clients
+	id int not null auto_increment,
+    order_date datetime not null,
+    invoice_date datetime,
+    comments longtext,
+    client_id int,
+    constraint sales_ordersPK primary key (id),
+    constraint clientsFK foreign key (client_id)
+		references clients (id)
+        on update no action on delete no action
+);
+
+create table sales_order_services( -- creates table for sales_order_services with primary key id with reference to sales_order, clients, and services
+	id int not null auto_increment,
+    quantity numeric,
+    discount numeric,
+    service_schedule_date datetime,
+    extra_information longtext,
+    sales_order_id int,
+    service_id int,
+    client_id int,
+    constraint sales_order_servicesPK primary key (id),
+    constraint sales_ordersFK foreign key (sales_order_id)
+		references sales_orders (id)
+        on update no action on delete no action, 
+	constraint servicesFK foreign key (service_id)
+		references services (id)
+        on update no action on delete no action,
+	constraint clientFK foreign key (client_id)
+		references clients (id)
+        on update no action on delete no action
+);
+
+create table history_types( -- creates table for history_types with primary key id
+	id int not null auto_increment,
+    name varchar(50),
+    constraint history_typesPK primary key (id)
+);
+
+create table sales_order_service_history( -- creates table for sales_orders_service_history with primary key id with reference to sales_order_services and history_types
+	id int not null auto_increment,
+    entry_date datetime,
+    notes longtext,
+    sales_order_service_id int,
+    history_type_id int,
+    constraint sales_order_service_historyPK primary key (id),
+    constraint sales_order_servicesFK foreign key (sales_order_service_id)
+		references sales_order_services (id)
+        on update no action on delete no action,
+    constraint history_typesFK foreign key (history_type_id)
+		references history_types (id)
+        on delete no action
+);
+
+-- populates table services 
+insert into services
+	(name, description, cost)
+    values
+    ('Tech Repair', 'Replace phone battery', '50.00'),
+    ('Tech Support', 'Fix software issues', '50.00'),
+    ('Mailling Service', 'Post Office', '50.00'),
+    ('Curb-side pick up', 'Deliever your online order to your car', '50.00'),
+    ('Tech classes', 'In office seminars for varying types of technology', '50.00');
+-- populates table states_provinces
+insert into states_provinces
+	(name)
+    values
+    ('Ontario'),
+    ('Nova Scotia'),
+    ('Manitoba'),
+    ('British Columbia'),
+    ('Nunavut'),
+    ('"Alberta');
+-- populates table countries
+insert into countries
+	(name)
+    values
+    ('Canada'),
+    ('France'),
+    ('USA'),
+    ('England'),
+    ('Mexico');
+-- populates table histroy_types
+insert into history_types
+	(name)
+    values
+    ('old'),
+    ('new'),
+    ('on sale'),
+    ('call back'),
+    ('return');
+-- populates table clients
+insert into clients
+	(name, address, address2, city, states_province_id, postal_code, country_id, phone_number, email)
+    values
+    ('Andrianna', '465 bowville', '672 treehill' , 'ottawa', 1, 'K4B0L2', 2 ,  '613-345-6789', 'andrianna@gmail.com'),
+    ('Owen', '467 bowville', '673 treehill' , 'ottawa', 3, 'K4B0L2', 1, 613-345-7654, 'owen@gmail.com'),
+    ('Isabel', '464 bowville', '670 treehill' , 'Toronto', 2, 'K4B0L2', 3, 613-345-2345, 'isabel@gmail.com');
+-- populates table sales_orders
+insert into sales_orders
+	(client_id, order_date, invoice_date, comments)
+    values
+    (3, now(), now(), 'no comments'),
+    (1, now(), now(), 'no comments'),
+    (2, now(), now(), 'no comments');
+-- populates table sales_order_services
+insert into sales_order_services
+	(sales_order_id, service_id, client_id, quantity, discount, service_schedule_date, extra_information)
+    values
+    (1, 2, 2, '1','3.99', now(), 'no addictional information'),
+    (2, 3, 3, '3','1.99', now(), 'no addictional information'),
+    (3, 1, 2, '2','5.99', now(), 'no addictional information');
+-- populates table sales_order_service_history
+insert into sales_order_service_history
+	(sales_order_service_id, entry_date, notes, history_type_id)
+    values
+    (1, now(), 'no notes', 2),
+    (2, now(), 'no notes', 3),
+    (3, now(), 'no notes', 1);

@@ -1,0 +1,48 @@
+-- Andrianna Wardill
+-- 04106235
+use flightdb;
+-- Question 1
+select count(*) from airlines;
+-- Question 2
+select avg(elevation)
+from airports;
+-- Question 3
+select elevation, min(elevation), max(elevation)
+from airports;
+-- Question 4
+select avg(elevation)
+from airports
+group by country_id;
+-- Question 5
+select country_id, avg(elevation)
+from airports
+group by country_id
+order by country_id;
+-- Question 6 
+select country_id, avg(elevation) as average_elevation
+from airports
+group by country_id
+order by avg(elevation) DESC;
+-- Question 7
+select country_id, avg(elevation)
+from airports
+group by country_id
+having avg(elevation) > 300
+order by avg(elevation) DESC;
+-- Question 8
+select count(name)
+from aircrafts
+where name like 'Boeing' or name like 'Airbus'
+group by name;
+-- Question 9
+select name, count(wake_size)
+from aircrafts
+where name like 'Boeing' or name like 'Airbus'
+group by name;
+-- Question 10
+select id
+from countries
+where name like 'Canada';
+select country_id, count(active)
+from airlines
+where country_id = 208 and active = 'Y';

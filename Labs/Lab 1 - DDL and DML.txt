@@ -1,0 +1,125 @@
+-- Andrianna Wardill
+-- 041067235
+drop database if exists lab6;
+create database lab6;
+use lab6;
+-- creates a table for the customers 
+CREATE TABLE customers (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(150),
+    phone_number VARCHAR(20),
+    street_address VARCHAR(50),
+    city VARCHAR(30),
+    province CHAR(2),
+    postal_code CHAR(6),
+    CONSTRAINT customersPK PRIMARY KEY (id)
+);
+-- creates a table for the orders
+CREATE TABLE orders (
+    id INT NOT NULL AUTO_INCREMENT,
+    order_date DATETIME,
+    customer_id INT NOT NULL,
+    CONSTRAINT odersPK PRIMARY KEY (id),
+    CONSTRAINT customerFK FOREIGN KEY (customer_id)
+        REFERENCES customers (id)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+-- creates a table for the product types
+CREATE TABLE product_types (
+	id int Not Null auto_increment,
+    name varchar(50) not null,
+    constraint product_typePK PRIMARY KEY (id)
+    ); 
+-- creates a table for the products
+CREATE TABLE products (
+	id int Not Null auto_increment,
+    description varchar(75) Not Null,
+    price decimal(6,2),
+    product_type_id int,
+    constraint productsPK PRIMARY KEY(id),
+    constraint product_typeFK FOREIGN KEY(product_type_id)
+		references product_types(id) ON DELETE CASCADE 
+) ;
+-- creates a table for the order lines
+    CREATE TABLE order_lines (
+    order_id INT,
+    product_id int,
+    quantity INT,
+    price DECIMAL(6 , 2 ),
+    line_total DECIMAL(8 , 2 ),
+    CONSTRAINT order_linesPK PRIMARY KEY (order_id , product_id),
+    constraint orderFK FOREIGN KEY (order_id)
+		references orders(id),
+	constraint productFK FOREIGN KEY (product_id)
+		references products(id) ON DELETE CASCADE 
+) ; 
+-- creates different product types to insert products into 
+insert into product_types
+	(name)
+    values
+    ('Software');
+insert into product_types
+	(name)
+    values
+    ('Hardware');
+insert into product_types
+	(name)
+    values
+    ('service');    
+-- insert different products into the correct product type
+insert into products
+		(description, price, product_type_id)
+        values
+			('windows',99.00,1);
+insert into products
+		(description, price, product_type_id)
+        values
+			('visual studio',300.00,1);
+insert into products 
+	(description, price, product_type_id)
+	values
+		('mouse',10.00,2);
+insert into products 
+	(description, price, product_type_id)
+    values
+		('back up',50.00,3);
+insert into products 
+	(description, price, product_type_id)
+    values
+		('system update',15.00,3);
+insert into products 
+	(description, price, product_type_id)
+    values
+		('usb sticks',10.00,2);
+-- inserts 5 different customer information 
+insert into customers
+	(name, email, phone_number, street_address, city, province, postal_code)
+    values
+	('bob', 'bob@gmail.com','879-555-1212','123 street','toronto','ON','OBJN4M');
+insert into customers
+	(name, email, phone_number, street_address, city, province, postal_code)
+    values
+	('adam', 'adam@gmail.com','879-555-1212','123 street','toronto','ON','OBJN4M');
+insert into customers
+	(name, email, phone_number, street_address, city, province, postal_code)
+    values
+	('mary', 'mary@gmail.com','879-555-1212','123 street','toronto','ON','OBJN4M');
+insert into customers
+	(name, email, phone_number, street_address, city, province, postal_code)
+    values
+	('joe', 'joe@gmail.com','879-555-1212','123 street','toronto','ON','OBJN4M');
+insert into customers
+	(name, email, phone_number, street_address, city, province, postal_code)
+    values
+	('bill', 'bill@gmail.com','879-555-1212','123 street','toronto','ON','OBJN4M');
+-- updates the first customers phone number and postal code
+update customers
+		set phone_number = '613-123-4567'
+        where id = 1;
+update customers
+		set postal_code = 'K2B87Y'
+        where id = 1;
+-- deletes the product type software 
+delete from product_types
+	where id = 1;

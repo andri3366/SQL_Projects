@@ -1,0 +1,14 @@
+-- Andrianna Wardill, Isabel Foy, Owen Chatland
+
+-- uses assignment02
+use assignment02;
+
+-- Dynamic view 4, the create view will select all clients who live in the city 'ott'
+CREATE VIEW Canada_V as
+select * from clients
+where city = 'ott';
+
+-- Dynamic view 9, the create view materialized selects all clients with the name 'andrianna'
+CREATE VIEW materialized (Canada_MV) as
+select name from clients
+where name = 'andrianna';
